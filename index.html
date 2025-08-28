@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy & Risk Prototype</title>
+    <title>Energy & Risk Prototype - Dynamic Theme</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #DC2626; /* Red 600 */
+            --primary-hover-color: #B91C1C; /* Red 700 */
+            --primary-light-color: #FEE2E2; /* Red 100 */
+            --primary-border-color: #EF4444; /* Red 500 */
+            --primary-ring-color: #F87171; /* Red 400 */
+            --primary-text-color: #991B1B; /* Red 800 */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             padding-bottom: 80px; /* Add padding to prevent content from being hidden by the nav */
@@ -20,10 +29,14 @@
             @apply flex items-center justify-center w-8 h-8 rounded-full border-2;
         }
         .stepper-item.active {
-            @apply bg-[#008A44] border-[#008A44] text-white;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            @apply text-white;
         }
         .stepper-item.completed {
-            @apply bg-[#008A44] border-[#008A44] text-white;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            @apply text-white;
         }
         .stepper-item.inactive {
             @apply border-gray-300 bg-white;
@@ -31,11 +44,32 @@
         .stepper-line {
             @apply w-16 h-0.5 bg-gray-300;
         }
-        /* Style for selected upgrades. Using explicit CSS properties for robustness. */
+        /* Style for selected upgrades. */
         .upgrade-item.selected {
-            background-color: #D1FAE5; /* bg-green-100 */
-            border-color: #10B981; /* border-green-500 */
-            box-shadow: 0 0 0 2px #6EE7B7; /* ring-2 ring-green-300 */
+            background-color: var(--primary-light-color);
+            border-color: var(--primary-border-color);
+            box-shadow: 0 0 0 2px var(--primary-ring-color);
+        }
+        .color-swatch.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--primary-color);
+        }
+        
+        /* THEME CLASSES - JS will target these */
+        .theme-bg-primary { background-color: var(--primary-color); }
+        .theme-bg-light { background-color: var(--primary-light-color); }
+        .theme-text-primary { color: var(--primary-color); }
+        .theme-border-primary { border-color: var(--primary-color); }
+        .theme-focus-ring:focus {
+            --tw-ring-color: var(--primary-ring-color);
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+            border-color: var(--primary-border-color);
+        }
+        .theme-checkbox:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
     </style>
 </head>
@@ -46,9 +80,9 @@
         <!-- Header -->
         <header class="flex justify-between items-center pb-4 border-b mb-6">
              <div class="flex items-center space-x-4">
-                <!-- Generic Green Square Logo -->
-                <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100" height="100" rx="8" fill="#008A44"/>
+                <!-- Generic Logo -->
+                <svg id="header-logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="8" fill="var(--primary-color)"/>
                 </svg>
                 <div class="flex items-center space-x-2">
                     <span class="text-xl font-bold text-gray-800">climative</span>
@@ -67,12 +101,23 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">What are you here for today?</h1>
                 <p class="text-gray-600 mb-8">Select an option to get started.</p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="startFlow('energy')" class="w-full bg-[#008A44] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#007A3D] transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    <button onclick="startFlow('energy')" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
                         Make my home more energy efficient
                     </button>
-                    <button onclick="startFlow('risk')" class="w-full bg-[#008A44] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#007A3D] transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    <button onclick="startFlow('risk')" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
                         Reduce my home's exposure to risk
                     </button>
+                </div>
+                <div class="mt-8 pt-6 border-t">
+                    <p class="text-sm text-gray-500 mb-4">Choose a theme color</p>
+                    <div id="color-selector" class="flex justify-center gap-3">
+                        <div onclick="setTheme('blue')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-blue-600 transition-transform"></div>
+                        <div onclick="setTheme('red')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-red-600 transition-transform"></div>
+                        <div onclick="setTheme('green')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-green-600 transition-transform"></div>
+                        <div onclick="setTheme('purple')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-purple-600 transition-transform"></div>
+                        <div onclick="setTheme('orange')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-orange-600 transition-transform"></div>
+                        <div onclick="setTheme('yellow')" class="color-swatch h-8 w-8 rounded-full cursor-pointer bg-yellow-500 transition-transform"></div>
+                    </div>
                 </div>
             </div>
 
@@ -86,19 +131,19 @@
                     <div class="stepper-line"></div>
                     <div class="stepper-item inactive">3</div>
                 </div>
-                <img src="https://placehold.co/150x150/E6F4EA/008A44?text=Illustration&font=inter" alt="Home Illustration" class="mx-auto mb-6 rounded-lg">
+                <img id="step-1-img" src="https://placehold.co/150x150/FEE2E2/DC2626?text=Illustration&font=inter" alt="Home Illustration" class="mx-auto mb-6 rounded-lg">
                 <h1 id="step-1-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2"></h1>
                 <p class="text-gray-600 mb-6">Find out in minutes how to better protect and improve your home.</p>
                 <div class="bg-gray-50 p-6 rounded-lg">
                      <p class="text-gray-700 mb-4 text-sm">Search your address for a free personalized report and guidance.</p>
                     <div class="relative">
-                        <input type="text" placeholder="Search Your Address" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#008A44] focus:border-transparent">
-                        <button onclick="showStep(2)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#008A44]">
+                        <input type="text" placeholder="Search Your Address" class="theme-focus-ring w-full p-3 border border-gray-300 rounded-lg">
+                        <button onclick="showStep(2)" class="theme-text-primary absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </button>
                     </div>
                 </div>
-                 <p class="text-sm text-gray-500 mt-8">Already Have an Account? <a href="#" onclick="showStep(5)" class="text-[#008A44] font-semibold">Sign In Here</a></p>
+                 <p class="text-sm text-gray-500 mt-8">Already Have an Account? <a href="#" onclick="showStep(5)" class="theme-text-primary font-semibold">Sign In Here</a></p>
             </div>
 
             <!-- Step 2: Confirm Address -->
@@ -117,7 +162,7 @@
                     <div class="relative w-40 h-20 mx-auto bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                         <img src="https://placehold.co/160x80/E5E7EB/9CA3AF?text=Map+View&font=inter" class="opacity-50"/>
                         <div class="absolute">
-                            <div class="w-10 h-10 bg-[#008A44] rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                            <div class="theme-bg-primary w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
                                 <div class="w-2 h-2 bg-white rounded-full"></div>
                             </div>
                         </div>
@@ -125,7 +170,7 @@
                     <p class="font-semibold text-gray-800">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
                 </div>
                 <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                    <button onclick="showStep(3)" class="w-full bg-[#008A44] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#007A3D] transition duration-300">YES, THIS IS MY ADDRESS</button>
+                    <button onclick="showStep(3)" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300">YES, THIS IS MY ADDRESS</button>
                     <button onclick="showStep(1)" class="w-full bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300">CHANGE ADDRESS</button>
                 </div>
             </div>
@@ -148,7 +193,7 @@
                         <p class="text-sm font-semibold text-gray-800 text-left">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
                         <p class="text-sm text-gray-600 mb-4 text-left">Is the right home selected?</p>
                         <div class="flex gap-2">
-                            <button onclick="showStep(4)" class="flex-1 bg-[#008A44] text-white text-sm font-semibold py-2 px-4 rounded-lg hover:bg-[#007A3D] transition">YES, THIS IS MY HOME</button>
+                            <button onclick="showStep(4)" class="theme-bg-primary flex-1 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">YES, THIS IS MY HOME</button>
                             <button onclick="showStep(2)" class="flex-1 bg-gray-200 text-gray-700 text-sm font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">NO, SOMETHING'S NOT RIGHT</button>
                         </div>
                     </div>
@@ -161,7 +206,7 @@
                 <div class="bg-gray-50 border rounded-lg p-4 text-left mb-6">
                     <p class="font-semibold text-gray-700">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
                 </div>
-                <button onclick="showStep(5)" class="w-full bg-[#008A44] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#007A3D] transition duration-300 mb-6">SIGN IN - CLAIM MY FREE REPORT</button>
+                <button onclick="showStep(5)" class="theme-bg-primary w-full text-white font-bold py-3 px-6 rounded-lg transition duration-300 mb-6">SIGN IN - CLAIM MY FREE REPORT</button>
                 
                 <div class="flex justify-center items-center space-x-4 text-gray-400 mb-6">
                     <div class="text-green-500"><svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>
@@ -184,13 +229,13 @@
                     <div class="space-y-4">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#008A44] focus:border-[#008A44]" placeholder="you@example.com" required>
+                            <input type="email" id="email" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none" placeholder="you@example.com" required>
                         </div>
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#008A44] focus:border-[#008A44]" required>
+                            <input type="password" id="password" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none" required>
                         </div>
-                        <button type="submit" class="w-full bg-[#008A44] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#007A3D] transition duration-300">SIGN IN</button>
+                        <button type="submit" class="theme-bg-primary w-full text-white font-bold py-3 px-6 rounded-lg transition duration-300">SIGN IN</button>
                     </div>
                 </form>
             </div>
@@ -206,7 +251,7 @@
                     <h2 class="text-lg font-bold text-gray-800 mb-4">Home Rating</h2>
                     <div class="flex border-b text-center">
                         <button class="flex-1 py-2 text-xs sm:text-sm font-semibold text-gray-500">EMISSIONS RATING</button>
-                        <button class="flex-1 py-2 text-xs sm:text-sm font-semibold text-[#008A44] border-b-2 border-[#008A44]">ENERGY RATING</button>
+                        <button class="theme-text-primary theme-border-primary flex-1 py-2 text-xs sm:text-sm font-semibold border-b-2">ENERGY RATING</button>
                         <button class="flex-1 py-2 text-xs sm:text-sm font-semibold text-gray-500">ENERGY USE BREAKDOWN</button>
                     </div>
                     <div class="pt-6 text-center">
@@ -234,32 +279,32 @@
                 </div>
                  <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">Upgrade Scenarios</h2>
-                    <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg text-center mb-4">
-                        <p class="text-3xl font-bold text-green-700">$5,500</p>
-                        <p class="text-sm text-green-600">SAVINGS OVER 20 YEARS</p>
+                    <div class="theme-bg-light theme-border-primary p-4 rounded-r-lg text-center mb-4 border-l-4">
+                        <p class="theme-text-primary text-3xl font-bold">$5,500</p>
+                        <p class="theme-text-primary text-sm">SAVINGS OVER 20 YEARS</p>
                     </div>
                     <div class="flex justify-around text-center mb-4">
                         <div>
-                            <p class="text-3xl font-bold text-[#008A44]">↓43%</p>
+                            <p class="theme-text-primary text-3xl font-bold">↓43%</p>
                             <p class="text-sm text-gray-600">EMISSIONS</p>
                         </div>
                         <div>
-                            <p class="text-3xl font-bold text-[#008A44]">↓47%</p>
+                            <p class="theme-text-primary text-3xl font-bold">↓47%</p>
                             <p class="text-sm text-gray-600">ENERGY USE</p>
                         </div>
                     </div>
                     <h3 class="font-semibold mb-2">Included Upgrades</h3>
                     <div class="flex justify-around text-center text-xs text-gray-600">
                         <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1">❄️</div>
+                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">❄️</div>
                             <span>Mini-Split Heat Pump</span>
                         </div>
                          <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1">💧</div>
+                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">💧</div>
                             <span>Drain Water Heat Recovery</span>
                         </div>
                          <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1">💨</div>
+                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">💨</div>
                             <span>Air Sealing</span>
                         </div>
                     </div>
@@ -271,17 +316,17 @@
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Speak to an Advisor</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Speak to a Banco financial advisor to start planning your home energy future.</p>
-                            <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">Get Started →</a>
+                            <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Get Started →</a>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Enhanced Energy Savings Program</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Assistance is available for low-to-moderate-income homeowners in New Brunswick.</p>
-                             <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">Learn More →</a>
+                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Learn More →</a>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Total Energy Savings Program</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">All homeowners are eligible for guidance and incentives to make their homes more energy efficient.</p>
-                             <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">Explore Incentives →</a>
+                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Explore Incentives →</a>
                         </div>
                     </div>
                 </div>
@@ -338,19 +383,19 @@
                 <!-- Resilience Score -->
                 <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6 text-center">
                     <h2 class="text-lg font-bold text-gray-800 mb-2">Resilience Score</h2>
-                    <p class="text-5xl font-extrabold text-[#008A44]">4<span class="text-3xl text-gray-400">/10</span></p>
+                    <p id="resilience-score-text" class="text-5xl font-extrabold">4<span class="text-3xl text-gray-400">/10</span></p>
                     <div class="w-full bg-gray-200 rounded-full h-4 my-4">
-                        <div class="bg-[#008A44] h-4 rounded-full" style="width: 40%"></div>
+                        <div id="resilience-score-bar" class="h-4 rounded-full" style="width: 40%"></div>
                     </div>
                 </div>
                 <!-- Resilient Home Scenarios -->
                 <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">Resilient-Home Scenarios</h2>
-                     <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg text-center mb-6">
-                        <p class="text-sm text-green-700">Potential Resilience Score</p>
-                        <p id="potential-score-text" class="text-3xl font-bold text-green-700">4<span class="text-xl text-green-500">/10</span></p>
-                         <div class="w-full bg-green-200 rounded-full h-2.5 mt-2">
-                            <div id="potential-score-bar" class="bg-green-600 h-2.5 rounded-full transition-all duration-500" style="width: 40%"></div>
+                     <div class="theme-bg-light theme-border-primary p-4 rounded-r-lg text-center mb-6 border-l-4">
+                        <p class="theme-text-primary text-sm">Potential Resilience Score</p>
+                        <p id="potential-score-text" class="text-3xl font-bold">4<span class="text-xl">/10</span></p>
+                         <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                            <div id="potential-score-bar" class="h-2.5 rounded-full transition-all duration-500" style="width: 40%"></div>
                         </div>
                     </div>
                     <h3 class="font-semibold mb-2 text-gray-700">Recommended Upgrades</h3>
@@ -380,17 +425,17 @@
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Protect Against Hail</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Recently filed a claim? Learn how to protect your home against more frequent hail events.</p>
-                            <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">Learn More →</a>
+                            <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Learn More →</a>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Prepare for Hurricane Season</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Limited time incentive from Seguro to protect yourself ahead of hurricane season.</p>
-                             <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">View Incentives →</a>
+                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">View Incentives →</a>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
                             <h3 class="font-bold text-gray-800">Lower Your Premiums</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Renewing? Learn how taking action today can lower your premiums and keep them low in an uncertain climate future.</p>
-                             <a href="#" class="text-sm font-semibold text-[#008A44] hover:underline">See How →</a>
+                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">See How →</a>
                         </div>
                     </div>
                 </div>
@@ -405,11 +450,11 @@
                 <div class="bg-gray-50 p-6 rounded-lg text-left">
                     <p class="text-sm text-gray-700 mb-4">For the best results, we recommend reviewing both your Energy and Resilience reports before starting.</p>
                     <label class="flex items-center">
-                        <input type="checkbox" id="confirm-review-checkbox" class="h-4 w-4 text-[#008A44] focus:ring-[#008A44] border-gray-300 rounded">
+                        <input type="checkbox" id="confirm-review-checkbox" class="theme-checkbox h-4 w-4 border-gray-300 rounded">
                         <span class="ml-2 text-sm text-gray-600">I have reviewed my reports.</span>
                     </label>
                 </div>
-                <button id="enter-builder-btn" onclick="showStep(9)" class="w-full mt-6 bg-[#008A44] text-white font-bold py-3 px-6 rounded-lg transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                <button id="enter-builder-btn" class="theme-bg-primary w-full mt-6 text-white font-bold py-3 px-6 rounded-lg transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" onclick="showStep(9)" disabled>
                     Enter Project Builder
                 </button>
             </div>
@@ -421,8 +466,8 @@
                     <div class="text-right">
                         <p class="text-xs text-gray-500 mb-1">Return to my:</p>
                         <div class="text-xs">
-                            <a href="#" onclick="showStep(6)" class="text-[#008A44] font-semibold hover:underline">Energy Report</a> |
-                            <a href="#" onclick="showStep(7)" class="text-[#008A44] font-semibold hover:underline">Risk Report</a>
+                            <a href="#" onclick="showStep(6)" class="theme-text-primary font-semibold hover:underline">Energy Report</a> |
+                            <a href="#" onclick="showStep(7)" class="theme-text-primary font-semibold hover:underline">Risk Report</a>
                         </div>
                     </div>
                  </div>
@@ -433,10 +478,10 @@
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-sm font-semibold text-gray-700">New Resilience Score</span>
-                                <span id="summary-resilience" class="text-sm font-bold text-green-600">4/10</span>
+                                <span id="summary-resilience" class="text-sm font-bold">4/10</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div id="summary-resilience-bar" class="bg-green-500 h-2.5 rounded-full transition-all duration-300" style="width: 40%"></div>
+                                <div id="summary-resilience-bar" class="h-2.5 rounded-full transition-all duration-300" style="width: 40%"></div>
                             </div>
                         </div>
                         <div>
@@ -509,7 +554,7 @@
     <!-- Floating Navigation -->
     <div id="navigation-buttons" class="fixed bottom-0 left-0 right-0 bg-white p-4 border-t shadow-lg flex justify-center gap-4">
         <button id="btn-back" onclick="goBack()" class="py-2 px-6 bg-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-400 transition">Back</button>
-        <button id="btn-forward" onclick="goNext()" class="py-2 px-6 bg-[#008A44] text-white font-semibold rounded-lg hover:bg-[#007A3D] transition">Next</button>
+        <button id="btn-forward" onclick="goNext()" class="theme-bg-primary py-2 px-6 text-white font-semibold rounded-lg transition">Next</button>
     </div>
 
 
@@ -522,6 +567,45 @@
         let riskReportInitialized = false;
         let projectBuilderInitialized = false;
 
+        // --- Theming Logic ---
+        const colorThemes = {
+            red:    { 100: '#FEE2E2', 300: '#FCA5A5', 400: '#F87171', 500: '#EF4444', 600: '#DC2626', 700: '#B91C1C', 800: '#991B1B' },
+            blue:   { 100: '#DBEAFE', 300: '#93C5FD', 400: '#60A5FA', 500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8', 800: '#1E40AF' },
+            green:  { 100: '#D1FAE5', 300: '#6EE7B7', 400: '#34D399', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46' },
+            purple: { 100: '#EDE9FE', 300: '#C4B5FD', 400: '#A78BFA', 500: '#8B5CF6', 600: '#7C3AED', 700: '#6D28D9', 800: '#5B21B6' },
+            orange: { 100: '#FFEDD5', 300: '#FDBA74', 400: '#FB923C', 500: '#F97316', 600: '#EA580C', 700: '#C2410C', 800: '#9A3412' },
+            yellow: { 100: '#FEF9C3', 300: '#FDE047', 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04', 700: '#A16207', 800: '#854D0E' }
+        };
+
+        function setTheme(colorName) {
+            const theme = colorThemes[colorName];
+            const root = document.documentElement;
+            root.style.setProperty('--primary-color', theme[600]);
+            root.style.setProperty('--primary-hover-color', theme[700]);
+            root.style.setProperty('--primary-light-color', theme[100]);
+            root.style.setProperty('--primary-border-color', theme[500]);
+            root.style.setProperty('--primary-ring-color', theme[400]);
+            root.style.setProperty('--primary-text-color', theme[600]);
+
+            document.querySelectorAll('.theme-bg-primary').forEach(el => el.style.backgroundColor = 'var(--primary-color)');
+            document.querySelectorAll('.theme-text-primary').forEach(el => el.style.color = 'var(--primary-color)');
+            document.querySelectorAll('.theme-border-primary').forEach(el => el.style.borderColor = 'var(--primary-color)');
+            document.querySelectorAll('.theme-bg-light').forEach(el => el.style.backgroundColor = 'var(--primary-light-color)');
+            
+            // Update color swatches
+            document.querySelectorAll('.color-swatch').forEach(swatch => swatch.classList.remove('selected'));
+            const currentSwatch = document.querySelector(`.bg-${colorName}-600`) || document.querySelector(`.bg-${colorName}-500`);
+            if(currentSwatch) currentSwatch.classList.add('selected');
+
+            // Update placeholder image
+            const img = document.getElementById('step-1-img');
+            if (img) {
+                const lightHex = theme[100].substring(1);
+                const darkHex = theme[600].substring(1);
+                img.src = `https://placehold.co/150x150/${lightHex}/${darkHex}?text=Illustration&font=inter`;
+            }
+        }
+
         // --- Content for Different Flows ---
         const flowContent = {
             energy: {
@@ -531,7 +615,7 @@
                     <h2 class="text-xl font-bold text-gray-800 mb-4 text-left">Home Rating</h2>
                     <div class="flex border-b">
                         <button class="flex-1 py-2 text-sm font-semibold text-gray-500">EMISSIONS RATING</button>
-                        <button class="flex-1 py-2 text-sm font-semibold text-[#008A44] border-b-2 border-[#008A44]">ENERGY RATING</button>
+                        <button class="theme-text-primary theme-border-primary flex-1 py-2 text-sm font-semibold border-b-2">ENERGY RATING</button>
                     </div>
                     <div class="pt-6 text-center">
                         <p class="text-2xl font-bold text-gray-400">Unknown</p>
@@ -573,6 +657,14 @@
             'roofing': { selected: false, value: 2 }
         };
         const baseResilienceScore = 4;
+        
+        function getScoreColor(score, maxScore = 10) {
+            const percentage = (score / maxScore) * 100;
+            if (percentage < 40) return { text: 'text-red-600', bg: 'bg-red-600' };
+            if (percentage < 60) return { text: 'text-orange-500', bg: 'bg-orange-500' };
+            if (percentage < 80) return { text: 'text-yellow-500', bg: 'bg-yellow-500' };
+            return { text: 'text-green-600', bg: 'bg-green-600' };
+        }
 
         function updatePotentialScore() {
             let potentialScore = baseResilienceScore;
@@ -582,9 +674,14 @@
                 }
             }
             potentialScore = Math.min(potentialScore, 10);
+            
             const scoreText = document.getElementById('potential-score-text');
             const scoreBar = document.getElementById('potential-score-bar');
-            scoreText.innerHTML = `${potentialScore}<span class="text-xl text-green-500">/10</span>`;
+            const colors = getScoreColor(potentialScore);
+
+            scoreText.innerHTML = `${potentialScore}<span class="text-xl">/10</span>`;
+            scoreText.className = `text-3xl font-bold ${colors.text}`;
+            scoreBar.className = `h-2.5 rounded-full transition-all duration-500 ${colors.bg}`;
             scoreBar.style.width = `${potentialScore * 10}%`;
         }
 
@@ -601,6 +698,10 @@
                 const element = document.getElementById(`upgrade-${key}`);
                 if(element) element.addEventListener('click', () => handleRiskUpgradeClick(key));
             });
+            const baseScoreColors = getScoreColor(baseResilienceScore);
+            document.getElementById('resilience-score-text').className = `text-5xl font-extrabold ${baseScoreColors.text}`;
+            document.getElementById('resilience-score-bar').className = `h-4 rounded-full ${baseScoreColors.bg}`;
+
             updatePotentialScore();
             riskReportInitialized = true;
         }
@@ -634,20 +735,28 @@
             resilience = Math.min(resilience, 10);
 
             // Update Resilience Score
+            const resilienceColors = getScoreColor(resilience);
             document.getElementById('summary-resilience').textContent = `${resilience}/10`;
+            document.getElementById('summary-resilience').className = `text-sm font-bold ${resilienceColors.text}`;
+            document.getElementById('summary-resilience-bar').className = `h-2.5 rounded-full transition-all duration-300 ${resilienceColors.bg}`;
             document.getElementById('summary-resilience-bar').style.width = `${resilience * 10}%`;
             
             // Update Energy Score
             const energyBar = document.getElementById('summary-energy-bar');
             const energyText = document.getElementById('summary-energy');
             energyText.textContent = energy;
-            // Simple scale for energy bar (lower is better)
             const energyPercent = 100 - Math.max(0, (energy - 50) / (200 - 50)) * 100;
             energyBar.style.width = `${energyPercent}%`;
-            if (energy < 100) energyBar.className = 'bg-green-500 h-2.5 rounded-full transition-all duration-300';
-            else if (energy < 150) energyBar.className = 'bg-yellow-500 h-2.5 rounded-full transition-all duration-300';
-            else energyBar.className = 'bg-orange-500 h-2.5 rounded-full transition-all duration-300';
-
+            if (energy < 100) {
+                energyBar.className = 'bg-green-500 h-2.5 rounded-full transition-all duration-300';
+                energyText.className = 'text-sm font-bold text-green-600';
+            } else if (energy < 150) {
+                energyBar.className = 'bg-yellow-500 h-2.5 rounded-full transition-all duration-300';
+                energyText.className = 'text-sm font-bold text-yellow-600';
+            } else {
+                energyBar.className = 'bg-orange-500 h-2.5 rounded-full transition-all duration-300';
+                 energyText.className = 'text-sm font-bold text-orange-600';
+            }
 
             // Update Financials
             document.getElementById('summary-cost').textContent = `$${cost.toLocaleString()}`;
@@ -746,6 +855,7 @@
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            setTheme('red'); // Set default theme
             showStep(0);
         });
     </script>
