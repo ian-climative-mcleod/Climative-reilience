@@ -3,48 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy & Risk Prototype - Dynamic Theme</title>
+    <title>Unified Threat Mitigation Prototype</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #DC2626; /* Red 600 */
-            --primary-hover-color: #B91C1C; /* Red 700 */
-            --primary-light-color: #FEE2E2; /* Red 100 */
-            --primary-border-color: #EF4444; /* Red 500 */
-            --primary-ring-color: #F87171; /* Red 400 */
-            --primary-text-color: #991B1B; /* Red 800 */
+            --primary-color: #059669; /* Green 600 */
+            --primary-light-color: #D1FAE5; /* Green 100 */
+            --primary-border-color: #10B981; /* Green 500 */
+            --primary-ring-color: #34D399; /* Green 400 */
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            padding-bottom: 80px; /* Add padding to prevent content from being hidden by the nav */
+            padding-bottom: 80px;
         }
-        /* Helper class to hide elements */
-        .hidden {
-            display: none;
-        }
-        /* Custom styles for the progress stepper */
-        .stepper-item {
-            @apply flex items-center justify-center w-8 h-8 rounded-full border-2;
-        }
-        .stepper-item.active {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            @apply text-white;
-        }
-        .stepper-item.completed {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            @apply text-white;
-        }
-        .stepper-item.inactive {
-            @apply border-gray-300 bg-white;
-        }
-        .stepper-line {
-            @apply w-16 h-0.5 bg-gray-300;
-        }
-        /* Style for selected upgrades. */
+        .hidden { display: none; }
+
+        /* Stepper styles */
+        .stepper-item { @apply flex items-center justify-center w-8 h-8 rounded-full border-2; }
+        .stepper-item.active { background-color: var(--primary-color); border-color: var(--primary-color); @apply text-white; }
+        .stepper-item.completed { background-color: var(--primary-color); border-color: var(--primary-color); @apply text-white; }
+        .stepper-item.inactive { @apply border-gray-300 bg-white; }
+        .stepper-line { @apply w-16 h-0.5 bg-gray-300; }
+
+        /* Selection styles */
         .upgrade-item.selected {
             background-color: var(--primary-light-color);
             border-color: var(--primary-border-color);
@@ -55,21 +38,23 @@
             box-shadow: 0 0 0 3px white, 0 0 0 5px var(--primary-color);
         }
         
-        /* THEME CLASSES - JS will target these */
+        /* Theme-aware classes */
         .theme-bg-primary { background-color: var(--primary-color); }
         .theme-bg-light { background-color: var(--primary-light-color); }
         .theme-text-primary { color: var(--primary-color); }
         .theme-border-primary { border-color: var(--primary-color); }
         .theme-focus-ring:focus {
             --tw-ring-color: var(--primary-ring-color);
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+            box-shadow: 0 0 0 2px var(--tw-ring-color);
             border-color: var(--primary-border-color);
         }
         .theme-checkbox:checked {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+        }
+        .theme-radio:checked {
+             background-color: var(--primary-color);
+             border-color: var(--primary-color);
         }
     </style>
 </head>
@@ -80,7 +65,6 @@
         <!-- Header -->
         <header class="flex justify-between items-center pb-4 border-b mb-6">
              <div class="flex items-center space-x-4">
-                <!-- Generic Logo -->
                 <svg id="header-logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <rect width="100" height="100" rx="8" fill="var(--primary-color)"/>
                 </svg>
@@ -98,16 +82,11 @@
 
             <!-- Step 0: Initial Choice -->
             <div id="step-0" class="text-center">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">What are you here for today?</h1>
-                <p class="text-gray-600 mb-8">Select an option to get started.</p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="startFlow('energy')" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
-                        Make my home more energy efficient
-                    </button>
-                    <button onclick="startFlow('risk')" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
-                        Reduce my home's exposure to risk
-                    </button>
-                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Understand and Mitigate Your Home's Threats</h1>
+                <p class="text-gray-600 mb-8">Get a free, personalized plan to protect your home from physical and financial risks.</p>
+                <button onclick="showStep(1)" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    Get My Free Home Report
+                </button>
                 <div class="mt-8 pt-6 border-t">
                     <p class="text-sm text-gray-500 mb-4">Choose a theme color</p>
                     <div id="color-selector" class="flex justify-center gap-3">
@@ -123,852 +102,399 @@
 
             <!-- Step 1: Find Address -->
             <div id="step-1" class="hidden text-center">
-                <!-- Stepper -->
                 <div class="flex justify-center items-center mb-6">
-                    <div class="stepper-item active">1</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item inactive">2</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item inactive">3</div>
+                    <div class="stepper-item active">1</div><div class="stepper-line"></div><div class="stepper-item inactive">2</div><div class="stepper-line"></div><div class="stepper-item inactive">3</div>
                 </div>
-                <img id="step-1-img" src="https://placehold.co/150x150/FEE2E2/DC2626?text=Illustration&font=inter" alt="Home Illustration" class="mx-auto mb-6 rounded-lg">
-                <h1 id="step-1-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2"></h1>
-                <p class="text-gray-600 mb-6">Find out in minutes how to better protect and improve your home.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Get Your Home Threat Report</h1>
+                <p class="text-gray-600 mb-6">Search your address for a free personalized report and mitigation plan.</p>
                 <div class="bg-gray-50 p-6 rounded-lg">
-                     <p class="text-gray-700 mb-4 text-sm">Search your address for a free personalized report and guidance.</p>
                     <div class="relative">
                         <input type="text" placeholder="Search Your Address" class="theme-focus-ring w-full p-3 border border-gray-300 rounded-lg">
-                        <button onclick="showStep(2)" class="theme-text-primary absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </button>
+                        <button onclick="showStep(2)" class="theme-text-primary absolute right-3 top-1/2 -translate-y-1/2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
                     </div>
                 </div>
-                 <p class="text-sm text-gray-500 mt-8">Already Have an Account? <a href="#" onclick="showStep(5)" class="theme-text-primary font-semibold">Sign In Here</a></p>
+                 <p class="text-sm text-gray-500 mt-8">Already Have an Account? <a href="#" onclick="showStep(4)" class="theme-text-primary font-semibold">Sign In Here</a></p>
             </div>
 
             <!-- Step 2: Confirm Address -->
             <div id="step-2" class="hidden text-center">
-                <!-- Stepper -->
-                <div class="flex justify-center items-center mb-6">
-                    <div class="stepper-item completed">✓</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item active">2</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item inactive">3</div>
+                 <div class="flex justify-center items-center mb-6">
+                    <div class="stepper-item completed">✓</div><div class="stepper-line"></div><div class="stepper-item active">2</div><div class="stepper-line"></div><div class="stepper-item inactive">3</div>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Confirm Address</h1>
                 <p class="text-gray-600 mb-8">This will allow us to populate any publicly available information for your home.</p>
                 <div class="bg-gray-100 p-6 rounded-lg border border-gray-200">
-                    <div class="relative w-40 h-20 mx-auto bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                        <img src="https://placehold.co/160x80/E5E7EB/9CA3AF?text=Map+View&font=inter" class="opacity-50"/>
-                        <div class="absolute">
-                            <div class="theme-bg-primary w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                                <div class="w-2 h-2 bg-white rounded-full"></div>
-                            </div>
-                        </div>
-                    </div>
                     <p class="font-semibold text-gray-800">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
                 </div>
                 <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                    <button onclick="showStep(3)" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-300">YES, THIS IS MY ADDRESS</button>
-                    <button onclick="showStep(1)" class="w-full bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300">CHANGE ADDRESS</button>
+                    <button onclick="showStep(3)" class="theme-bg-primary w-full text-white font-semibold py-3 px-6 rounded-lg">YES, THIS IS MY ADDRESS</button>
+                    <button onclick="showStep(1)" class="w-full bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg">CHANGE ADDRESS</button>
                 </div>
             </div>
 
             <!-- Step 3: Choose Location on Map -->
             <div id="step-3" class="hidden text-center">
-                <!-- Stepper -->
                 <div class="flex justify-center items-center mb-6">
-                    <div class="stepper-item completed">✓</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item completed">✓</div>
-                    <div class="stepper-line"></div>
-                    <div class="stepper-item active">3</div>
+                    <div class="stepper-item completed">✓</div><div class="stepper-line"></div><div class="stepper-item completed">✓</div><div class="stepper-line"></div><div class="stepper-item active">3</div>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Choose Location on Map</h1>
-                <p class="text-gray-600 mb-6">This helps us get the most accurate information about your building, local programs, weather, and more.</p>
-                <div class="relative rounded-lg overflow-hidden shadow-lg">
-                    <img src="https://placehold.co/400x300/374151/D1D5DB?text=3D+Map+View&font=inter" alt="Map with selected building" class="w-full">
+                <p class="text-gray-600 mb-6">This helps us get the most accurate information for your specific location.</p>
+                 <div class="relative rounded-lg overflow-hidden shadow-lg">
+                    <img src="https://placehold.co/400x300/374151/D1D5DB?text=3D+Map+View&font=inter" alt="Map" class="w-full">
                     <div class="absolute bottom-0 left-0 right-0 bg-white p-4 m-4 rounded-lg shadow-xl">
-                        <p class="text-sm font-semibold text-gray-800 text-left">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
-                        <p class="text-sm text-gray-600 mb-4 text-left">Is the right home selected?</p>
-                        <div class="flex gap-2">
-                            <button onclick="showStep(4)" class="theme-bg-primary flex-1 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">YES, THIS IS MY HOME</button>
-                            <button onclick="showStep(2)" class="flex-1 bg-gray-200 text-gray-700 text-sm font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">NO, SOMETHING'S NOT RIGHT</button>
+                         <div class="flex gap-2">
+                            <button onclick="showStep(5)" class="theme-bg-primary flex-1 text-white text-sm font-semibold py-2 px-4 rounded-lg">YES, THIS IS MY HOME</button>
+                            <button onclick="showStep(2)" class="flex-1 bg-gray-200 text-gray-700 text-sm font-semibold py-2 px-4 rounded-lg">NO, SOMETHING'S NOT RIGHT</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Step 4: Preview Report -->
-            <div id="step-4" class="hidden text-center">
-                <h1 id="step-4-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4"></h1>
-                <div class="bg-gray-50 border rounded-lg p-4 text-left mb-6">
-                    <p class="font-semibold text-gray-700">801 Rue Mitchell, Fredericton, New Brunswick E3B 6E8, Canada</p>
-                </div>
-                <button onclick="showStep(5)" class="theme-bg-primary w-full text-white font-bold py-3 px-6 rounded-lg transition duration-300 mb-6">SIGN IN - CLAIM MY FREE REPORT</button>
-                
-                <div class="flex justify-center items-center space-x-4 text-gray-400 mb-6">
-                    <div class="text-green-500"><svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>
-                    <div><svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"></path></svg></div>
-                    <div><svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"></path></svg></div>
-                </div>
-
-                <div id="preview-container" class="bg-white border rounded-lg p-6">
-                    <!-- Preview content will be injected here by JS -->
-                </div>
-            </div>
-
-            <!-- Step 5: Sign In -->
-            <div id="step-5" class="hidden">
-                <div class="text-center">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Sign In</h1>
-                    <p class="text-gray-600 mb-8">Access your full home report.</p>
-                </div>
-                <form action="#" onsubmit="event.preventDefault(); goToFinalReport();">
+            <!-- Step 4: Sign In -->
+            <div id="step-4" class="hidden">
+                 <div class="text-center"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">Sign In</h1></div>
+                <form action="#" onsubmit="event.preventDefault(); showStep(5);">
                     <div class="space-y-4">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" id="email" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none" placeholder="you@example.com" required>
+                            <input type="email" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
                         </div>
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" id="password" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none" required>
+                            <input type="password" class="theme-focus-ring mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required>
                         </div>
-                        <button type="submit" class="theme-bg-primary w-full text-white font-bold py-3 px-6 rounded-lg transition duration-300">SIGN IN</button>
+                        <button type="submit" class="theme-bg-primary w-full text-white font-bold py-3 px-6 rounded-lg">SIGN IN</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Step 6: Energy Report -->
+            <!-- Step 5: Unified Report -->
+            <div id="step-5" class="hidden">
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Home Threat Report</h1>
+                <div class="text-sm text-gray-500 mb-4 border-b pb-4">
+                    <p>801 RUE MITCHELL STREET, FREDERICTON</p>
+                </div>
+                 <button onclick="showStep(6)" class="w-full theme-bg-light theme-text-primary font-semibold py-3 px-6 rounded-lg hover:opacity-80 transition mb-6">Personalize My Report</button>
+                
+                <div id="threat-report-container" class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">Threat assessment for your home:</h2>
+                    <!-- Threats will be dynamically inserted here -->
+                </div>
+                
+                <!-- Teaser Section -->
+                <div id="teaser-section" class="space-y-4 mb-6">
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                        <p class="text-gray-700">Your current energy use is <span class="font-bold">181 GJ/year</span>.</p>
+                        <p class="text-gray-700">We can help you reduce it by up to <span id="energy-reduction-teaser" class="font-bold theme-text-primary text-lg">30%</span>.</p>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                        <p class="text-gray-700">Your home has a <span class="font-bold text-red-600">High</span> overall physical threat level.</p>
+                        <p class="text-gray-700">We can help you reduce it by up to <span id="threat-reduction-teaser" class="font-bold theme-text-primary text-lg">70%</span>.</p>
+                    </div>
+                </div>
+
+                <button onclick="showStep(7)" class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">Open Project Builder to See How</button>
+            </div>
+            
+            <!-- Step 6: Questionnaire -->
             <div id="step-6" class="hidden">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">Home Energy Report</h1>
-                <div class="text-sm text-gray-500 mb-4 border-b pb-4">
-                    <p>801 RUE MITCHELL STREET, FREDERICTON</p>
-                    <p>Updated: May, 9, 2025 - 4:51 pm</p>
-                </div>
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Home Rating</h2>
-                    <div class="flex border-b text-center">
-                        <button class="flex-1 py-2 text-xs sm:text-sm font-semibold text-gray-500">EMISSIONS RATING</button>
-                        <button class="theme-text-primary theme-border-primary flex-1 py-2 text-xs sm:text-sm font-semibold border-b-2">ENERGY RATING</button>
-                        <button class="flex-1 py-2 text-xs sm:text-sm font-semibold text-gray-500">ENERGY USE BREAKDOWN</button>
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">Tell us more about your home</h1>
+                <form id="questionnaire-form" class="space-y-4 text-left">
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Do you have a sump pump?</label>
+                        <div class="mt-2 flex gap-x-6"><label><input type="radio" name="sumpPump" value="yes" class="theme-radio"> Yes</label><label><input type="radio" name="sumpPump" value="no" class="theme-radio" checked> No</label></div>
                     </div>
-                    <div class="pt-6 text-center">
-                        <div class="relative inline-block">
-                             <div class="bg-orange-500 text-white font-bold py-1 px-3 rounded-md">This Home</div>
-                             <div class="text-5xl font-extrabold text-gray-800 my-1">181</div>
-                        </div>
-                        <div class="flex items-center justify-between text-xs text-gray-500 mt-4">
-                            <span>Uses Least Energy</span>
-                            <div class="flex-1 flex items-center justify-center space-x-1 mx-2 h-4 rounded-full overflow-hidden bg-gray-200">
-                                <div class="h-full bg-green-500" style="width: 16.6%"></div>
-                                <div class="h-full bg-yellow-400" style="width: 16.6%"></div>
-                                <div class="h-full bg-orange-400" style="width: 16.6%"></div>
-                                <div class="h-full bg-orange-500" style="width: 16.6%"></div>
-                                <div class="h-full bg-red-500" style="width: 16.6%"></div>
-                                <div class="h-full bg-red-700" style="width: 16.6%"></div>
-                            </div>
-                            <span>Uses Most Energy</span>
-                        </div>
-                         <div class="mt-4 inline-flex items-center bg-gray-100 rounded-lg p-2">
-                            <span class="text-gray-600 mr-2">Typical New Home</span>
-                            <span class="font-bold text-gray-800">93</span>
-                        </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Do you have a float switch?</label>
+                        <div class="mt-2 flex gap-x-6"><label><input type="radio" name="floatSwitch" value="yes" class="theme-radio"> Yes</label><label><input type="radio" name="floatSwitch" value="no" class="theme-radio" checked> No</label></div>
                     </div>
-                </div>
-                 <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Upgrade Scenarios</h2>
-                    <div class="theme-bg-light theme-border-primary p-4 rounded-r-lg text-center mb-4 border-l-4">
-                        <p class="theme-text-primary text-3xl font-bold">$5,500</p>
-                        <p class="theme-text-primary text-sm">SAVINGS OVER 20 YEARS</p>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Do you have a water level alarm?</label>
+                        <div class="mt-2 flex gap-x-6"><label><input type="radio" name="waterAlarm" value="yes" class="theme-radio"> Yes</label><label><input type="radio" name="waterAlarm" value="no" class="theme-radio" checked> No</label></div>
                     </div>
-                    <div class="flex justify-around text-center mb-4">
-                        <div>
-                            <p class="theme-text-primary text-3xl font-bold">↓43%</p>
-                            <p class="text-sm text-gray-600">EMISSIONS</p>
-                        </div>
-                        <div>
-                            <p class="theme-text-primary text-3xl font-bold">↓47%</p>
-                            <p class="text-sm text-gray-600">ENERGY USE</p>
-                        </div>
+                    <div>
+                        <label for="roof-material" class="block text-sm font-medium text-gray-700">What is your roof material?</label>
+                        <select id="roof-material" name="roofMaterial" class="theme-focus-ring mt-1 block w-full p-2 border-gray-300 rounded-md">
+                            <option>Shingles</option><option>Steel</option><option>Poly</option><option value="hail_resistant">Hail Resistant</option>
+                        </select>
                     </div>
-                    <h3 class="font-semibold mb-2">Included Upgrades</h3>
-                    <div class="flex justify-around text-center text-xs text-gray-600">
-                        <div class="flex flex-col items-center">
-                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">❄️</div>
-                            <span>Mini-Split Heat Pump</span>
-                        </div>
-                         <div class="flex flex-col items-center">
-                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">💧</div>
-                            <span>Drain Water Heat Recovery</span>
-                        </div>
-                         <div class="flex flex-col items-center">
-                            <div class="theme-bg-light w-12 h-12 rounded-full flex items-center justify-center mb-1">💨</div>
-                            <span>Air Sealing</span>
-                        </div>
+                     <div>
+                        <label for="siding-material" class="block text-sm font-medium text-gray-700">What is your siding material?</label>
+                        <select id="siding-material" name="sidingMaterial" class="theme-focus-ring mt-1 block w-full p-2 border-gray-300 rounded-md">
+                            <option>Vinyl</option><option>Wood</option><option>Aluminum</option><option value="fire_resistant">Hardiplank (Fire Resistant)</option>
+                        </select>
                     </div>
-                 </div>
-                 <!-- Next Steps -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Next Steps for New Brunswickers</h2>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Speak to an Advisor</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Speak to a Banco financial advisor to start planning your home energy future.</p>
-                            <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Get Started →</a>
-                        </div>
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Enhanced Energy Savings Program</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Assistance is available for low-to-moderate-income homeowners in New Brunswick.</p>
-                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Learn More →</a>
-                        </div>
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Total Energy Savings Program</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">All homeowners are eligible for guidance and incentives to make their homes more energy efficient.</p>
-                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Explore Incentives →</a>
-                        </div>
+                     <div>
+                        <label for="window-type" class="block text-sm font-medium text-gray-700">What type of windows do you have?</label>
+                        <select id="window-type" name="windowType" class="theme-focus-ring mt-1 block w-full p-2 border-gray-300 rounded-md">
+                            <option>Vinyl</option><option>Wood Frame</option><option>Aluminum</option>
+                        </select>
                     </div>
-                </div>
-                <!-- Project Builder CTA -->
-                <button onclick="showStep(8)" class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition duration-300">Go to Project Builder</button>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Have you ever done window or door upgrades?</label>
+                        <div class="mt-2 flex gap-x-6"><label><input type="radio" name="doorUpgrades" value="yes" class="theme-radio"> Yes</label><label><input type="radio" name="doorUpgrades" value="no" class="theme-radio" checked> No</label></div>
+                    </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Have you had an insurance claim recently?</label>
+                        <div class="mt-2 flex gap-x-6"><label><input type="radio" name="insuranceClaim" value="yes" class="theme-radio"> Yes</label><label><input type="radio" name="insuranceClaim" value="no" class="theme-radio" checked> No</label></div>
+                    </div>
+                    <div>
+                        <label for="claim-type" class="block text-sm font-medium text-gray-700">If yes, what was it for?</label>
+                        <select id="claim-type" name="claimType" class="theme-focus-ring mt-1 block w-full p-2 border-gray-300 rounded-md">
+                            <option>N/A</option><option>Flood</option><option>Fire</option><option>Wind Damage</option><option>Other</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="submitQuestionnaire()" class="w-full theme-bg-primary text-white font-bold py-3 px-6 rounded-lg mt-6">Update My Report</button>
+                </form>
             </div>
-
-            <!-- Step 7: Risk Report -->
-            <div id="step-7" class="hidden">
-                 <h1 class="text-2xl font-bold text-gray-800 mb-2">Home Resilience Report</h1>
-                <div class="text-sm text-gray-500 mb-4 border-b pb-4">
-                    <p>801 RUE MITCHELL STREET, FREDERICTON</p>
-                    <p>Updated: May, 9, 2025 - 4:51 pm</p>
-                </div>
-                 <button onclick="showStep(10)" class="w-full theme-bg-light theme-text-primary font-semibold py-3 px-6 rounded-lg hover:opacity-80 transition duration-300 mb-6">Tell us more about your home</button>
-                <!-- Major Risks -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Major Risks</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-700">Flood Risk</span>
-                                <span class="text-sm font-bold text-orange-600">High</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-orange-500 h-2.5 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-700">Wildfire Risk</span>
-                                <span class="text-sm font-bold text-yellow-600">Medium</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 45%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 <!-- Special Risks -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Special Risks in Your Area</h2>
-                    <div class="space-y-4">
-                         <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-700">Hail Risk</span>
-                                <span class="text-sm font-bold text-red-600">High</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-red-500 h-2.5 rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Resilience Score -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6 text-center">
-                    <h2 class="text-lg font-bold text-gray-800 mb-2">Resilience Score</h2>
-                    <p id="resilience-score-text" class="text-5xl font-extrabold">4<span class="text-3xl text-gray-400">/10</span></p>
-                    <div class="w-full bg-gray-200 rounded-full h-4 my-4">
-                        <div id="resilience-score-bar" class="h-4 rounded-full" style="width: 40%"></div>
-                    </div>
-                </div>
-                <!-- Resilient Home Scenarios -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Resilient-Home Scenarios</h2>
-                     <div class="theme-bg-light theme-border-primary p-4 rounded-r-lg text-center mb-6 border-l-4">
-                        <p class="theme-text-primary text-sm">Potential Resilience Score</p>
-                        <p id="potential-score-text" class="text-3xl font-bold">4<span class="text-xl">/10</span></p>
-                         <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                            <div id="potential-score-bar" class="h-2.5 rounded-full transition-all duration-500" style="width: 40%"></div>
-                        </div>
-                    </div>
-                    <h3 class="font-semibold mb-2 text-gray-700">Recommended Upgrades</h3>
-                    <div id="risk-upgrades-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs text-gray-600">
-                        <div id="upgrade-sump-pump" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300">
-                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">💧</div>
-                            <span>Install Sump Pump</span>
-                        </div>
-                         <div id="upgrade-siding" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300">
-                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🔥</div>
-                            <span>Fire-Resistant Siding</span>
-                        </div>
-                         <div id="upgrade-drainage" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300">
-                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🌿</div>
-                            <span>Improve Yard Drainage</span>
-                        </div>
-                        <div id="upgrade-roofing" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300">
-                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🏠</div>
-                            <span>Hail-Resistant Roofing</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Next Steps Risk -->
-                <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Next Steps to Protect Your Home</h2>
-                    <div class="space-y-4">
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Protect Against Hail</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Recently filed a claim? Learn how to protect your home against more frequent hail events.</p>
-                            <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">Learn More →</a>
-                        </div>
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Prepare for Hurricane Season</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Limited time incentive from Seguro to protect yourself ahead of hurricane season.</p>
-                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">View Incentives →</a>
-                        </div>
-                        <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start">
-                            <h3 class="font-bold text-gray-800">Lower Your Premiums</h3>
-                            <p class="text-sm text-gray-600 mt-1 mb-3 flex-grow">Renewing? Learn how taking action today can lower your premiums and keep them low in an uncertain climate future.</p>
-                             <a href="#" class="theme-text-primary text-sm font-semibold hover:underline">See How →</a>
-                        </div>
-                    </div>
-                </div>
-                 <!-- Project Builder CTA -->
-                <button onclick="showStep(8)" class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition duration-300">Go to Project Builder</button>
-            </div>
-
-            <!-- Step 8: Project Builder Landing Page -->
-            <div id="step-8" class="hidden text-center">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Welcome to the Project Builder</h1>
-                <p class="text-gray-600 mb-6">Here you can combine energy efficiency and resilience upgrades to create a custom plan for your home.</p>
-                <div class="bg-gray-50 p-6 rounded-lg text-left">
-                    <p class="text-sm text-gray-700 mb-4">For the best results, we recommend reviewing both your Energy and Resilience reports before starting.</p>
-                    <div class="flex justify-around mb-4">
-                        <button onclick="showStep(6)" class="theme-bg-light theme-text-primary font-semibold py-2 px-4 rounded-lg hover:opacity-80 transition duration-300 text-sm">View Energy Report</button>
-                        <button onclick="showStep(7)" class="theme-bg-light theme-text-primary font-semibold py-2 px-4 rounded-lg hover:opacity-80 transition duration-300 text-sm">View Risk Report</button>
-                    </div>
-                    <label class="flex items-center">
-                        <input type="checkbox" id="confirm-review-checkbox" class="theme-checkbox h-4 w-4 border-gray-300 rounded">
-                        <span class="ml-2 text-sm text-gray-600">I have reviewed my reports.</span>
-                    </label>
-                </div>
-                <button id="enter-builder-btn" class="theme-bg-primary w-full mt-6 text-white font-bold py-3 px-6 rounded-lg transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" onclick="showStep(9)" disabled>
-                    Enter Project Builder
+            
+            <!-- Step 7: Project Builder Landing -->
+            <div id="step-7" class="hidden text-center">
+                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Project Builder</h1>
+                <p class="text-gray-600 mb-6">Plan your mitigation strategy by selecting upgrades to see their impact on your threat levels and finances.</p>
+                <button id="enter-builder-btn" class="theme-bg-primary w-full mt-6 text-white font-bold py-3 px-6 rounded-lg" onclick="showStep(8)">
+                    Start Building
                 </button>
             </div>
 
-            <!-- Step 9: Project Builder Page -->
-            <div id="step-9" class="hidden">
+            <!-- Step 8: Project Builder Page -->
+            <div id="step-8" class="hidden">
                  <div class="flex justify-between items-center mb-4">
                     <h1 class="text-2xl font-bold text-gray-800">Project Builder</h1>
-                    <div class="text-right">
-                        <p class="text-xs text-gray-500 mb-1">Return to my:</p>
-                        <div class="text-xs">
-                            <a href="#" onclick="showStep(6)" class="theme-text-primary font-semibold hover:underline">Energy Report</a> |
-                            <a href="#" onclick="showStep(7)" class="theme-text-primary font-semibold hover:underline">Risk Report</a>
-                        </div>
-                    </div>
+                    <a href="#" onclick="showStep(5)" class="theme-text-primary font-semibold hover:underline text-sm">Back to Report</a>
                  </div>
-                 <!-- Dynamic Summary -->
+                 
                  <div class="bg-white border rounded-lg p-4 sm:p-6 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">Dynamic Project Summary</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-700">New Resilience Score</span>
-                                <span id="summary-resilience" class="text-sm font-bold">4/10</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div id="summary-resilience-bar" class="h-2.5 rounded-full transition-all duration-300" style="width: 40%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-700">New Energy Rating</span>
-                                <span id="summary-energy" class="text-sm font-bold text-orange-600">181</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div id="summary-energy-bar" class="bg-orange-500 h-2.5 rounded-full transition-all duration-300" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 pt-2">
-                             <div class="bg-blue-50 p-3 rounded-lg text-center">
-                                <p class="text-sm text-blue-700">Total Est. Cost</p>
-                                <p id="summary-cost" class="text-xl font-bold text-blue-800">$0</p>
-                            </div>
-                             <div class="bg-blue-50 p-3 rounded-lg text-center">
-                                <p class="text-sm text-blue-700">20-Year Savings</p>
-                                <p id="summary-savings" class="text-xl font-bold text-blue-800">$0</p>
-                            </div>
-                        </div>
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">Project Impact Summary</h2>
+                    <div id="builder-summary-container" class="space-y-3">
+                        <!-- Dynamic summary will be inserted here -->
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 mt-4 border-t">
+                         <div class="text-center"><p class="text-sm text-gray-600">Total Est. Cost</p><p id="summary-cost" class="text-xl font-bold text-gray-800">$0</p></div>
+                         <div class="text-center"><p class="text-sm text-gray-600">20-Year Energy Savings</p><p id="summary-savings" class="text-xl font-bold text-green-600">$0</p></div>
                     </div>
                  </div>
-                 <!-- Upgrade Selection -->
+
                  <div class="space-y-6">
                     <div>
-                        <h3 class="font-semibold text-gray-700 mb-2">Resilience Upgrades</h3>
-                        <div id="builder-risk-upgrades" class="grid grid-cols-2 gap-2 text-center text-xs text-gray-600">
-                             <div id="builder-sump-pump" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">💧</div>
-                                <span>Install Sump Pump</span>
-                            </div>
-                             <div id="builder-siding" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🔥</div>
-                                <span>Fire-Resistant Siding</span>
-                            </div>
-                             <div id="builder-drainage" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🌿</div>
-                                <span>Improve Yard Drainage</span>
-                            </div>
-                            <div id="builder-roofing" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">🏠</div>
-                                <span>Hail-Resistant Roofing</span>
-                            </div>
-                        </div>
-                    </div>
-                     <div>
-                        <h3 class="font-semibold text-gray-700 mb-2">Energy Efficiency Upgrades</h3>
-                        <div class="grid grid-cols-2 gap-2 text-center text-xs text-gray-600">
-                             <div id="builder-heat-pump" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">❄️</div>
-                                <span>Mini-Split Heat Pump</span>
-                            </div>
-                             <div id="builder-water-heater" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">💧</div>
-                                <span>Drain Water Heat Recovery</span>
-                            </div>
-                             <div id="builder-air-sealing" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-transparent cursor-pointer transition-all duration-300 bg-white">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1 text-xl">💨</div>
-                                <span>Air Sealing</span>
-                            </div>
+                        <h3 class="font-semibold text-gray-700 mb-2">Pick upgrades to reduce threats</h3>
+                        <div id="mitigations-container" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center text-xs text-gray-600">
+                             <!-- Mitigations will be inserted here -->
                         </div>
                     </div>
                  </div>
             </div>
-            
-            <!-- Step 10: Questionnaire -->
-            <div id="step-10" class="hidden">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">Tell us more about your home</h1>
-                <p class="text-sm text-gray-600 mb-6">Your answers will help us provide more accurate recommendations.</p>
-                <form id="questionnaire-form" class="space-y-4 text-left">
-                    <!-- Sump Pump -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Do you have a sump pump?</label>
-                        <div class="mt-2 flex gap-x-6">
-                            <label><input type="radio" name="sumpPump" value="yes" class="theme-checkbox"> Yes</label>
-                            <label><input type="radio" name="sumpPump" value="no" class="theme-checkbox" checked> No</label>
-                        </div>
-                    </div>
-                    <!-- Float Switch -->
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Do you have a float switch?</label>
-                        <div class="mt-2 flex gap-x-6">
-                            <label><input type="radio" name="floatSwitch" value="yes" class="theme-checkbox"> Yes</label>
-                            <label><input type="radio" name="floatSwitch" value="no" class="theme-checkbox" checked> No</label>
-                        </div>
-                    </div>
-                     <!-- Water Alarm -->
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Do you have a water level alarm?</label>
-                        <div class="mt-2 flex gap-x-6">
-                            <label><input type="radio" name="waterAlarm" value="yes" class="theme-checkbox"> Yes</label>
-                            <label><input type="radio" name="waterAlarm" value="no" class="theme-checkbox" checked> No</label>
-                        </div>
-                    </div>
-                    <!-- Roof Material -->
-                    <div>
-                        <label for="roof-material" class="block text-sm font-medium text-gray-700">What is your roof material?</label>
-                        <select id="roof-material" name="roofMaterial" class="theme-focus-ring mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md">
-                            <option>Shingles</option>
-                            <option>Steel</option>
-                            <option>Poly</option>
-                            <option value="hail_resistant">Hail Resistant</option>
-                        </select>
-                    </div>
-                     <!-- Siding Material -->
-                    <div>
-                        <label for="siding-material" class="block text-sm font-medium text-gray-700">What is your siding material?</label>
-                        <select id="siding-material" name="sidingMaterial" class="theme-focus-ring mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md">
-                            <option>Vinyl</option>
-                            <option>Wood</option>
-                            <option>Aluminum</option>
-                            <option>Hardiplank</option>
-                        </select>
-                    </div>
-                    <!-- Window Type -->
-                    <div>
-                        <label for="window-type" class="block text-sm font-medium text-gray-700">What type of windows do you have?</label>
-                        <select id="window-type" name="windowType" class="theme-focus-ring mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md">
-                            <option>Vinyl</option>
-                            <option>Wood Frame</option>
-                            <option>Aluminum</option>
-                        </select>
-                    </div>
-                    <!-- Window/Door Upgrades -->
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Have you ever done window or door upgrades?</label>
-                        <div class="mt-2 flex gap-x-6">
-                            <label><input type="radio" name="windowUpgrades" value="yes" class="theme-checkbox"> Yes</label>
-                            <label><input type="radio" name="windowUpgrades" value="no" class="theme-checkbox" checked> No</label>
-                        </div>
-                    </div>
-                    <!-- Insurance Claim -->
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Have you had an insurance claim recently?</label>
-                        <div class="mt-2 flex gap-x-6">
-                            <label><input type="radio" name="insuranceClaim" value="yes" class="theme-checkbox"> Yes</label>
-                            <label><input type="radio" name="insuranceClaim" value="no" class="theme-checkbox" checked> No</label>
-                        </div>
-                    </div>
-                    <!-- Claim Type (Conditional) -->
-                    <div id="claim-type-question" class="hidden">
-                        <label for="claim-type" class="block text-sm font-medium text-gray-700">What was the claim for?</label>
-                        <select id="claim-type" name="claimType" class="theme-focus-ring mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md">
-                            <option>Flood</option>
-                            <option>Fire</option>
-                            <option>Wind Damage</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <button type="button" onclick="submitQuestionnaire()" class="w-full theme-bg-primary text-white font-bold py-3 px-6 rounded-lg mt-6">Save & Return to Report</button>
-                </form>
-            </div>
-
 
         </main>
     </div>
     
     <!-- Floating Navigation -->
     <div id="navigation-buttons" class="fixed bottom-0 left-0 right-0 bg-white p-4 border-t shadow-lg flex justify-center gap-4">
-        <button id="btn-back" onclick="goBack()" class="py-2 px-6 bg-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-400 transition">Back</button>
-        <button id="btn-forward" onclick="goNext()" class="theme-bg-primary py-2 px-6 text-white font-semibold rounded-lg transition">Next</button>
+        <button id="btn-back" onclick="goBack()" class="py-2 px-6 bg-gray-300 text-gray-800 font-semibold rounded-lg">Back</button>
+        <button id="btn-forward" onclick="goNext()" class="theme-bg-primary py-2 px-6 text-white font-semibold rounded-lg">Next</button>
     </div>
 
-
     <script>
-        // --- State Management ---
         let currentStep = 0;
-        let currentFlow = 'energy'; // 'energy' or 'risk'
-        const totalCommonSteps = 5; 
-        let historyStack = [0]; 
-        let riskReportInitialized = false;
-        let projectBuilderInitialized = false;
-        let questionnaireAnswers = {
-            sumpPump: 'no',
-            roofMaterial: 'shingles'
+        let historyStack = [0];
+
+        // --- Data Models ---
+        const initialThreats = {
+            flood: { name: 'Flood', level: 8, selected: false },
+            wildfire: { name: 'Wildfire', level: 5, selected: false },
+            hail: { name: 'Hail', level: 9, selected: false },
+            energy: { name: 'Rising Energy Prices', level: 7, selected: false, usage: 181 }
         };
 
-        // --- Theming Logic ---
+        const mitigations = {
+            'sump-pump': { name: 'Install Sump Pump', threats: { flood: -4 }, cost: 1500, savings: 100, selected: false },
+            'drainage': { name: 'Improve Yard Drainage', threats: { flood: -2 }, cost: 2000, savings: 0, selected: false },
+            'siding': { name: 'Fire-Resistant Siding', threats: { wildfire: -3 }, cost: 8000, savings: 200, selected: false },
+            'roofing': { name: 'Hail-Resistant Roofing', threats: { hail: -7 }, cost: 10000, savings: 300, selected: false },
+            'heat-pump': { name: 'Mini-Split Heat Pump', threats: { energy: -3 }, cost: 6000, savings: 3000, usageReduction: 40, selected: false },
+            'air-sealing': { name: 'Air Sealing', threats: { energy: -2 }, cost: 800, savings: 1500, usageReduction: 15, selected: false },
+            'insulation': { name: 'Attic Insulation', threats: { energy: -2 }, cost: 2500, savings: 2000, usageReduction: 25, selected: false }
+        };
+
+        let currentThreats = JSON.parse(JSON.stringify(initialThreats));
+
+        // --- Theming ---
         const colorThemes = {
-            red:    { 100: '#FEE2E2', 300: '#FCA5A5', 400: '#F87171', 500: '#EF4444', 600: '#DC2626', 700: '#B91C1C', 800: '#991B1B' },
-            blue:   { 100: '#DBEAFE', 300: '#93C5FD', 400: '#60A5FA', 500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8', 800: '#1E40AF' },
-            green:  { 100: '#D1FAE5', 300: '#6EE7B7', 400: '#34D399', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46' },
-            purple: { 100: '#EDE9FE', 300: '#C4B5FD', 400: '#A78BFA', 500: '#8B5CF6', 600: '#7C3AED', 700: '#6D28D9', 800: '#5B21B6' },
-            orange: { 100: '#FFEDD5', 300: '#FDBA74', 400: '#FB923C', 500: '#F97316', 600: '#EA580C', 700: '#C2410C', 800: '#9A3412' },
-            yellow: { 100: '#FEF9C3', 300: '#FDE047', 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04', 700: '#A16207', 800: '#854D0E' }
+            red: { 100: '#FEE2E2', 400: '#F87171', 500: '#EF4444', 600: '#DC2626' },
+            blue: { 100: '#DBEAFE', 400: '#60A5FA', 500: '#3B82F6', 600: '#2563EB' },
+            green: { 100: '#D1FAE5', 400: '#34D399', 500: '#10B981', 600: '#059669' },
+            purple: { 100: '#EDE9FE', 400: '#A78BFA', 500: '#8B5CF6', 600: '#7C3AED' },
+            orange: { 100: '#FFEDD5', 400: '#FB923C', 500: '#F97316', 600: '#EA580C' },
+            yellow: { 100: '#FEF9C3', 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' }
         };
 
         function setTheme(colorName) {
             const theme = colorThemes[colorName];
             const root = document.documentElement;
             root.style.setProperty('--primary-color', theme[600]);
-            root.style.setProperty('--primary-hover-color', theme[700]);
             root.style.setProperty('--primary-light-color', theme[100]);
             root.style.setProperty('--primary-border-color', theme[500]);
             root.style.setProperty('--primary-ring-color', theme[400]);
-            root.style.setProperty('--primary-text-color', theme[600]);
-
-            document.querySelectorAll('.theme-bg-primary').forEach(el => el.style.backgroundColor = 'var(--primary-color)');
-            document.querySelectorAll('.theme-text-primary').forEach(el => el.style.color = 'var(--primary-color)');
-            document.querySelectorAll('.theme-border-primary').forEach(el => el.style.borderColor = 'var(--primary-color)');
-            document.querySelectorAll('.theme-bg-light').forEach(el => el.style.backgroundColor = 'var(--primary-light-color)');
             
-            // Update color swatches
-            document.querySelectorAll('.color-swatch').forEach(swatch => swatch.classList.remove('selected'));
-            const currentSwatch = document.querySelector(`.bg-${colorName}-600`) || document.querySelector(`.bg-${colorName}-500`);
-            if(currentSwatch) currentSwatch.classList.add('selected');
-
-            // Update placeholder image
-            const img = document.getElementById('step-1-img');
-            if (img) {
-                const lightHex = theme[100].substring(1);
-                const darkHex = theme[600].substring(1);
-                img.src = `https://placehold.co/150x150/${lightHex}/${darkHex}?text=Illustration&font=inter`;
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            const swatchElement = document.querySelector(`.bg-${colorName}-600`) || document.querySelector(`.bg-${colorName}-500`);
+            if (swatchElement) {
+                swatchElement.classList.add('selected');
             }
         }
 
-        // --- Content for Different Flows ---
-        const flowContent = {
-            energy: {
-                step1Title: "Get My Home Energy Plan",
-                step4Title: "Here's a preview of your Home Energy Report",
-                previewHTML: `
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 text-left">Home Rating</h2>
-                    <div class="flex border-b">
-                        <button class="flex-1 py-2 text-sm font-semibold text-gray-500">EMISSIONS RATING</button>
-                        <button class="theme-text-primary theme-border-primary flex-1 py-2 text-sm font-semibold border-b-2">ENERGY RATING</button>
-                    </div>
-                    <div class="pt-6 text-center">
-                        <p class="text-2xl font-bold text-gray-400">Unknown</p>
-                        <div class="flex items-center justify-between text-xs text-gray-500 mt-4">
-                            <span>Uses Least Energy</span>
-                            <div class="flex-1 flex items-center justify-center space-x-1 mx-2">
-                                <div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div><div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div><div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div><div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div><div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div><div class="w-1/6 h-3 bg-gray-200 rounded-sm"></div>
-                            </div>
-                            <span>Uses Most Energy</span>
+        // --- UI Rendering ---
+        function getThreatLevel(level) {
+            if (level <= 4) return { text: 'Low', color: 'text-green-600', bg: 'bg-green-500' };
+            if (level <= 7) return { text: 'Medium', color: 'text-yellow-600', bg: 'bg-yellow-500' };
+            return { text: 'High', color: 'text-red-600', bg: 'bg-red-500' };
+        }
+
+        function renderThreats(containerId, threatsData) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ' <h2 class="text-lg font-bold text-gray-800 mb-4">Threat Assessment:</h2>';
+            for (const key in threatsData) {
+                const threat = threatsData[key];
+                const levelInfo = getThreatLevel(threat.level);
+                const threatHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-semibold text-gray-700">${threat.name}</span>
+                            <span class="text-sm font-bold ${levelInfo.color}">${levelInfo.text}</span>
                         </div>
-                    </div>`
-            },
-            risk: {
-                step1Title: "Get My Home Resilience Plan",
-                step4Title: "Here's a preview of your Home Resilience Report",
-                previewHTML: `
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 text-left">Risk Rating</h2>
-                    <div class="space-y-3">
-                        <div>
-                            <span class="text-sm font-semibold text-gray-700">Flood Risk</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1"><div class="bg-gray-400 h-2.5 rounded-full" style="width: 80%"></div></div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="${levelInfo.bg} h-2.5 rounded-full" style="width: ${threat.level * 10}%"></div>
                         </div>
-                        <div>
-                           <span class="text-sm font-semibold text-gray-700">Wildfire Risk</span>
-                           <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1"><div class="bg-gray-400 h-2.5 rounded-full" style="width: 45%"></div></div>
-                        </div>
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-800 mt-6 mb-2 text-left">Resilience Score</h2>
-                    <p class="text-2xl font-bold text-gray-400">Unknown</p>
-                `
+                    </div>`;
+                container.innerHTML += threatHTML;
             }
-        };
-
-        // --- Risk Report Interaction Logic ---
-        const riskUpgrades = {
-            'sump-pump': { selected: false, value: 2 },
-            'siding': { selected: false, value: 1 },
-            'drainage': { selected: false, value: 1 },
-            'roofing': { selected: false, value: 2 }
-        };
-        let baseResilienceScore = 4;
-        
-        function getScoreColor(score, maxScore = 10) {
-            const percentage = (score / maxScore) * 100;
-            if (percentage < 40) return { text: 'text-red-600', bg: 'bg-red-600' };
-            if (percentage < 60) return { text: 'text-orange-500', bg: 'bg-orange-500' };
-            if (percentage < 80) return { text: 'text-yellow-500', bg: 'bg-yellow-500' };
-            return { text: 'text-green-600', bg: 'bg-green-600' };
         }
 
-        function updatePotentialScore() {
-            let currentBase = baseResilienceScore;
-            if (questionnaireAnswers.sumpPump === 'yes') currentBase += riskUpgrades['sump-pump'].value;
-            if (questionnaireAnswers.roofMaterial === 'hail_resistant') currentBase += riskUpgrades['roofing'].value;
-            
-            let potentialScore = currentBase;
-            for (const key in riskUpgrades) {
-                if (riskUpgrades[key].selected) {
-                    potentialScore += riskUpgrades[key].value;
-                }
+        function renderMitigations() {
+            const container = document.getElementById('mitigations-container');
+            container.innerHTML = '';
+            for (const key in mitigations) {
+                const mitigation = mitigations[key];
+                const mitigationHTML = `
+                    <div id="mitigation-${key}" class="upgrade-item flex flex-col items-center p-2 rounded-lg border-2 border-gray-200 cursor-pointer bg-white">
+                        <span class="text-xl mb-1">${getIconForMitigation(key)}</span>
+                        <span>${mitigation.name}</span>
+                    </div>`;
+                container.innerHTML += mitigationHTML;
             }
-            potentialScore = Math.min(potentialScore, 10);
-            
-            const scoreText = document.getElementById('potential-score-text');
-            const scoreBar = document.getElementById('potential-score-bar');
-            const colors = getScoreColor(potentialScore);
-
-            scoreText.innerHTML = `${potentialScore}<span class="text-xl">/10</span>`;
-            scoreText.className = `text-3xl font-bold ${colors.text}`;
-            scoreBar.className = `h-2.5 rounded-full transition-all duration-500 ${colors.bg}`;
-            scoreBar.style.width = `${potentialScore * 10}%`;
-        }
-
-        function handleRiskUpgradeClick(upgradeKey) {
-            riskUpgrades[upgradeKey].selected = !riskUpgrades[upgradeKey].selected;
-            const element = document.getElementById(`upgrade-${upgradeKey}`);
-            element.classList.toggle('selected');
-            updatePotentialScore();
-        }
-
-        function initializeRiskReport() {
-            // Calculate current score based on questionnaire
-            let currentBase = baseResilienceScore;
-            document.getElementById('upgrade-sump-pump').style.display = 'flex';
-            document.getElementById('upgrade-roofing').style.display = 'flex';
-
-            if (questionnaireAnswers.sumpPump === 'yes') {
-                currentBase += riskUpgrades['sump-pump'].value;
-                document.getElementById('upgrade-sump-pump').style.display = 'none';
+            // Add event listeners after rendering
+            for (const key in mitigations) {
+                 document.getElementById(`mitigation-${key}`).addEventListener('click', () => toggleMitigation(key));
             }
-            if (questionnaireAnswers.roofMaterial === 'hail_resistant') {
-                currentBase += riskUpgrades['roofing'].value;
-                document.getElementById('upgrade-roofing').style.display = 'none';
-            }
-            currentBase = Math.min(currentBase, 10);
-
-            const baseScoreColors = getScoreColor(currentBase);
-            document.getElementById('resilience-score-text').innerHTML = `${currentBase}<span class="text-3xl text-gray-400">/10</span>`;
-            document.getElementById('resilience-score-text').className = `text-5xl font-extrabold ${baseScoreColors.text}`;
-            document.getElementById('resilience-score-bar').className = `h-4 rounded-full ${baseScoreColors.bg}`;
-            document.getElementById('resilience-score-bar').style.width = `${currentBase * 10}%`;
-
-            if (!riskReportInitialized) {
-                Object.keys(riskUpgrades).forEach(key => {
-                    const element = document.getElementById(`upgrade-${key}`);
-                    if(element) element.addEventListener('click', () => handleRiskUpgradeClick(key));
-                });
-                riskReportInitialized = true;
-            }
-            updatePotentialScore();
-        }
-
-        // --- Project Builder Logic ---
-        const allUpgrades = {
-            'sump-pump': { selected: false, resilience: 2, energy: 0, cost: 1500, savings: 500 },
-            'siding': { selected: false, resilience: 1, energy: 0, cost: 8000, savings: 200 },
-            'drainage': { selected: false, resilience: 1, energy: 0, cost: 2000, savings: 0 },
-            'roofing': { selected: false, resilience: 2, energy: 0, cost: 10000, savings: 300 },
-            'heat-pump': { selected: false, resilience: 0, energy: 40, cost: 6000, savings: 25000 },
-            'water-heater': { selected: false, resilience: 0, energy: 20, cost: 1200, savings: 5000 },
-            'air-sealing': { selected: false, resilience: 0, energy: 15, cost: 800, savings: 15500 },
-        };
-        const baseEnergyRating = 181;
-
-        function updateProjectBuilderSummary() {
-            let currentBase = baseResilienceScore;
-            if (questionnaireAnswers.sumpPump === 'yes') currentBase += riskUpgrades['sump-pump'].value;
-            if (questionnaireAnswers.roofMaterial === 'hail_resistant') currentBase += riskUpgrades['roofing'].value;
-
-            let resilience = currentBase;
-            let energy = baseEnergyRating;
-            let cost = 0;
-            let savings = 0;
-
-            for (const key in allUpgrades) {
-                if (allUpgrades[key].selected) {
-                    resilience += allUpgrades[key].resilience;
-                    energy -= allUpgrades[key].energy;
-                    cost += allUpgrades[key].cost;
-                    savings += allUpgrades[key].savings;
-                }
-            }
-            resilience = Math.min(resilience, 10);
-
-            // Update Resilience Score
-            const resilienceColors = getScoreColor(resilience);
-            document.getElementById('summary-resilience').textContent = `${resilience}/10`;
-            document.getElementById('summary-resilience').className = `text-sm font-bold ${resilienceColors.text}`;
-            document.getElementById('summary-resilience-bar').className = `h-2.5 rounded-full transition-all duration-300 ${resilienceColors.bg}`;
-            document.getElementById('summary-resilience-bar').style.width = `${resilience * 10}%`;
-            
-            // Update Energy Score
-            const energyBar = document.getElementById('summary-energy-bar');
-            const energyText = document.getElementById('summary-energy');
-            energyText.textContent = energy;
-            const energyPercent = 100 - Math.max(0, (energy - 50) / (200 - 50)) * 100;
-            energyBar.style.width = `${energyPercent}%`;
-            if (energy < 100) {
-                energyBar.className = 'bg-green-500 h-2.5 rounded-full transition-all duration-300';
-                energyText.className = 'text-sm font-bold text-green-600';
-            } else if (energy < 150) {
-                energyBar.className = 'bg-yellow-500 h-2.5 rounded-full transition-all duration-300';
-                energyText.className = 'text-sm font-bold text-yellow-600';
-            } else {
-                energyBar.className = 'bg-orange-500 h-2.5 rounded-full transition-all duration-300';
-                 energyText.className = 'text-sm font-bold text-orange-600';
-            }
-
-            // Update Financials
-            document.getElementById('summary-cost').textContent = `$${cost.toLocaleString()}`;
-            document.getElementById('summary-savings').textContent = `$${savings.toLocaleString()}`;
-        }
-
-        function handleBuilderUpgradeClick(key) {
-            allUpgrades[key].selected = !allUpgrades[key].selected;
-            const element = document.getElementById(`builder-${key}`);
-            element.classList.toggle('selected');
-            updateProjectBuilderSummary();
-        }
-
-        function initializeProjectBuilder() {
-            document.getElementById('builder-sump-pump').style.display = 'flex';
-            document.getElementById('builder-roofing').style.display = 'flex';
-            if (questionnaireAnswers.sumpPump === 'yes') {
-                document.getElementById('builder-sump-pump').style.display = 'none';
-            }
-             if (questionnaireAnswers.roofMaterial === 'hail_resistant') {
-                document.getElementById('builder-roofing').style.display = 'none';
-            }
-
-            if (!projectBuilderInitialized) {
-                Object.keys(allUpgrades).forEach(key => {
-                    const element = document.getElementById(`builder-${key}`);
-                    if (element) element.addEventListener('click', () => handleBuilderUpgradeClick(key));
-                });
-                projectBuilderInitialized = true;
-            }
-            updateProjectBuilderSummary();
         }
         
+        function getIconForMitigation(key) {
+            const icons = { 'sump-pump': '💧', 'drainage': '🌿', 'siding': '🔥', 'roofing': '🏠', 'heat-pump': '❄️', 'air-sealing': '💨', 'insulation': '🧱' };
+            return icons[key] || '🔧';
+        }
+
+        // --- Logic & State Updates ---
+        function calculateAndDisplayTeaser() {
+            // Energy Teaser
+            const totalEnergyReduction = Object.values(mitigations)
+                .filter(m => m.usageReduction)
+                .reduce((sum, m) => sum + m.usageReduction, 0);
+            const energyReductionPercent = Math.round((totalEnergyReduction / initialThreats.energy.usage) * 100);
+            document.getElementById('energy-reduction-teaser').textContent = `${energyReductionPercent}%`;
+
+            // Physical Threat Teaser
+            let initialPhysicalThreat = 0;
+            let potentialPhysicalThreat = 0;
+            const physicalThreatKeys = ['flood', 'wildfire', 'hail'];
+
+            physicalThreatKeys.forEach(key => {
+                initialPhysicalThreat += initialThreats[key].level;
+                let finalLevel = initialThreats[key].level;
+                Object.values(mitigations).forEach(m => {
+                    if (m.threats[key]) {
+                        finalLevel += m.threats[key];
+                    }
+                });
+                potentialPhysicalThreat += Math.max(0, finalLevel);
+            });
+            
+            const threatReductionPercent = initialPhysicalThreat > 0 
+                ? Math.round(((initialPhysicalThreat - potentialPhysicalThreat) / initialPhysicalThreat) * 100)
+                : 0;
+            document.getElementById('threat-reduction-teaser').textContent = `${threatReductionPercent}%`;
+        }
+
         function submitQuestionnaire() {
             const form = document.getElementById('questionnaire-form');
-            questionnaireAnswers.sumpPump = form.elements.sumpPump.value;
-            questionnaireAnswers.roofMaterial = form.elements.roofMaterial.value;
-            // Reset selections when questionnaire is submitted
-            Object.keys(riskUpgrades).forEach(k => riskUpgrades[k].selected = false);
-            document.querySelectorAll('#risk-upgrades-container .upgrade-item').forEach(el => el.classList.remove('selected'));
-            showStep(7);
+            const hasSumpPump = form.elements.sumpPump.value === 'yes';
+            const hasHailRoof = form.elements.roofMaterial.value === 'hail_resistant';
+            const hasFireSiding = form.elements.sidingMaterial.value === 'fire_resistant';
+
+            currentThreats = JSON.parse(JSON.stringify(initialThreats));
+
+            if (hasSumpPump) currentThreats.flood.level = Math.max(0, currentThreats.flood.level + mitigations['sump-pump'].threats.flood);
+            if (hasHailRoof) currentThreats.hail.level = Math.max(0, currentThreats.hail.level + mitigations['roofing'].threats.hail);
+            if (hasFireSiding) currentThreats.wildfire.level = Math.max(0, currentThreats.wildfire.level + mitigations['siding'].threats.wildfire);
+            
+            showStep(5);
         }
 
-        // --- Navigation Functions ---
-        
-        function startFlow(flowType) {
-            currentFlow = flowType;
-            document.getElementById('step-1-title').textContent = flowContent[currentFlow].step1Title;
-            document.getElementById('step-4-title').textContent = flowContent[currentFlow].step4Title;
-            document.getElementById('preview-container').innerHTML = flowContent[currentFlow].previewHTML;
-            showStep(1);
+        function updateBuilderSummary() {
+            let projectedThreats = JSON.parse(JSON.stringify(currentThreats));
+            let totalCost = 0;
+            let totalSavings = 0;
+
+            for (const key in mitigations) {
+                if (mitigations[key].selected) {
+                    totalCost += mitigations[key].cost;
+                    totalSavings += mitigations[key].savings;
+                    for (const threatKey in mitigations[key].threats) {
+                        projectedThreats[threatKey].level = Math.max(0, projectedThreats[threatKey].level + mitigations[key].threats[threatKey]);
+                    }
+                }
+            }
+            
+            renderThreats('builder-summary-container', projectedThreats);
+            document.getElementById('summary-cost').textContent = `$${totalCost.toLocaleString()}`;
+            document.getElementById('summary-savings').textContent = `$${totalSavings.toLocaleString()}`;
         }
+
+        function toggleMitigation(mitigationKey) {
+            mitigations[mitigationKey].selected = !mitigations[mitigationKey].selected;
+            document.getElementById(`mitigation-${mitigationKey}`).classList.toggle('selected');
+            updateBuilderSummary();
+        }
+
+        // --- Navigation ---
+        const mainFlowSequence = [0, 1, 2, 3, 5, 7, 8];
 
         function showStep(stepNumber) {
             document.querySelectorAll('#app-container > div').forEach(step => step.classList.add('hidden'));
-            const nextStepContainer = document.getElementById(`step-${stepNumber}`);
-            if (nextStepContainer) {
-                nextStepContainer.classList.remove('hidden');
-                currentStep = stepNumber;
-                if (historyStack[historyStack.length - 1] !== stepNumber) {
-                    historyStack.push(stepNumber);
-                }
+            document.getElementById(`step-${stepNumber}`).classList.remove('hidden');
+            
+            currentStep = stepNumber;
+            if (historyStack[historyStack.length - 1] !== stepNumber) {
+                historyStack.push(stepNumber);
             }
-            if (stepNumber === 7) initializeRiskReport();
+            
+            if (stepNumber === 5) {
+                renderThreats('threat-report-container', currentThreats);
+                calculateAndDisplayTeaser();
+            }
             if (stepNumber === 8) {
-                 document.getElementById('confirm-review-checkbox').addEventListener('change', (e) => {
-                    document.getElementById('enter-builder-btn').disabled = !e.target.checked;
-                });
+                Object.values(mitigations).forEach(m => m.selected = false);
+                renderMitigations();
+                updateBuilderSummary();
             }
-            if (stepNumber === 9) initializeProjectBuilder();
-            if (stepNumber === 10) {
-                 document.querySelector('input[name="insuranceClaim"]').addEventListener('change', (e) => {
-                    document.getElementById('claim-type-question').style.display = e.target.value === 'yes' ? 'block' : 'none';
-                });
-            }
+            
             updateNavButtons();
-        }
-        
-        function goToFinalReport() {
-            const finalStep = (currentFlow === 'energy') ? 6 : 7;
-            showStep(finalStep);
         }
 
         function goNext() {
-            if (currentStep < totalCommonSteps) {
-                showStep(currentStep + 1);
-            } else if (currentStep === totalCommonSteps) {
-                goToFinalReport();
+            const currentIndex = mainFlowSequence.indexOf(currentStep);
+            if (currentIndex !== -1 && currentIndex < mainFlowSequence.length - 1) {
+                const nextStep = mainFlowSequence[currentIndex + 1];
+                showStep(nextStep);
             }
         }
 
@@ -978,13 +504,10 @@
             const previousStep = historyStack[historyStack.length - 1];
             currentStep = previousStep;
             document.querySelectorAll('#app-container > div').forEach(step => step.classList.add('hidden'));
-            const prevStepContainer = document.getElementById(`step-${currentStep}`);
-            if (prevStepContainer) {
-                prevStepContainer.classList.remove('hidden');
-            }
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
             updateNavButtons();
         }
-
+        
         function updateNavButtons() {
             const backButton = document.getElementById('btn-back');
             const forwardButton = document.getElementById('btn-forward');
@@ -997,18 +520,23 @@
             navContainer.classList.remove('hidden');
             
             backButton.style.display = historyStack.length > 1 ? 'block' : 'none';
-            
-            const isFinalScreen = currentStep >= 8 && currentStep !== 10;
-            forwardButton.style.display = isFinalScreen ? 'none' : 'block';
+
+            const noForwardSteps = [4, 6, 8];
+            const isLastStep = mainFlowSequence.indexOf(currentStep) === mainFlowSequence.length - 1;
+            if (noForwardSteps.includes(currentStep) || isLastStep) {
+                forwardButton.style.display = 'none';
+            } else {
+                forwardButton.style.display = 'block';
+            }
         }
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            setTheme('red'); // Set default theme
+            setTheme('green');
             showStep(0);
         });
-    </script>
 
+    </script>
 </body>
 </html>
 
